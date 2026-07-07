@@ -62,7 +62,7 @@ def rules():
 def accept_rules():
     session["rules_accepted"] = True
     session["rules_accepted_at"] = datetime.utcnow().isoformat()
-    return {"ok": True}
+    return redirect(url_for("auth.register"))
 
 
 @bp.route("/regjistrohu", methods=["GET", "POST"])
