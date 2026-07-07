@@ -24,8 +24,8 @@
 <div class="rules-progress-note">
   <div class="app-shell" style="padding:0;">
     <div class="checkbox-row">
-      <input type="checkbox" id="confirm-read" disabled>
-      <label for="confirm-read" id="confirm-label">Lëviz deri në fund për të pranuar rregullat</label>
+      <input type="checkbox" id="confirm-read">
+      <label for="confirm-read" id="confirm-label">Kam lexuar dhe pranoj rregullat e kampit</label>
     </div>
     <button class="btn btn-primary btn-block" id="continue-btn" disabled>Vazhdo te regjistrimi</button>
   </div>
@@ -33,30 +33,10 @@
 
 <script>
 const checkbox = document.getElementById('confirm-read');
-const label = document.getElementById('confirm-label');
 const continueBtn = document.getElementById('continue-btn');
-let reachedEnd = false;
-
-function checkScrollPosition() {
-  if (reachedEnd) return;
-  const scrolledToBottom =
-    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
-  if (scrolledToBottom) {
-    reachedEnd = true;
-    checkbox.disabled = false;
-    label.textContent = 'Kam lexuar dhe pranoj rregullat e kampit';
-  }
-}
-
-// Rast rastesh: nëse rregullat zenë më pak vend se ekrani (s'ka nevojë të lëvizësh),
-// kontrollo menjëherë pas ngarkimit të faqes.
-window.addEventListener('load', checkScrollPosition);
-window.addEventListener('scroll', checkScrollPosition, { passive: true });
-window.addEventListener('resize', checkScrollPosition);
-checkScrollPosition();
 
 checkbox.addEventListener('change', () => {
-  continueBtn.disabled = !(checkbox.checked && reachedEnd);
+  continueBtn.disabled = !checkbox.checked;
 });
 
 continueBtn.addEventListener('click', async () => {
