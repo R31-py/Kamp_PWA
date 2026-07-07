@@ -19,7 +19,6 @@
     <li>Përdor gjuhë të përshtatshme.</li>
     <li>Respekto vendimet e stafit.</li>
   </ol>
-  <div id="rules-end-marker"></div>
 </div>
 
 <div class="rules-progress-note">
@@ -36,19 +35,25 @@
 const checkbox = document.getElementById('confirm-read');
 const label = document.getElementById('confirm-label');
 const continueBtn = document.getElementById('continue-btn');
-const marker = document.getElementById('rules-end-marker');
 let reachedEnd = false;
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      reachedEnd = true;
-      checkbox.disabled = false;
-      label.textContent = 'Kam lexuar dhe pranoj rregullat e kampit';
-    }
-  });
-}, { threshold: 0.9 });
-observer.observe(marker);
+function checkScrollPosition() {
+  if (reachedEnd) return;
+  const scrolledToBottom =
+    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+  if (scrolledToBottom) {
+    reachedEnd = true;
+    checkbox.disabled = false;
+    label.textContent = 'Kam lexuar dhe pranoj rregullat e kampit';
+  }
+}
+
+// Rast rastesh: nëse rregullat zenë më pak vend se ekrani (s'ka nevojë të lëvizësh),
+// kontrollo menjëherë pas ngarkimit të faqes.
+window.addEventListener('load', checkScrollPosition);
+window.addEventListener('scroll', checkScrollPosition, { passive: true });
+window.addEventListener('resize', checkScrollPosition);
+checkScrollPosition();
 
 checkbox.addEventListener('change', () => {
   continueBtn.disabled = !(checkbox.checked && reachedEnd);
