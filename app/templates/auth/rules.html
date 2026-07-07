@@ -21,32 +21,16 @@
   </ol>
 </div>
 
-<div class="rules-progress-note">
-  <div class="app-shell" style="padding:0;">
-    <div class="checkbox-row">
-      <input type="checkbox" id="confirm-read">
-      <label for="confirm-read" id="confirm-label">Kam lexuar dhe pranoj rregullat e kampit</label>
+<form method="POST" action="{{ url_for('auth.accept_rules') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="rules-progress-note">
+    <div class="app-shell" style="padding:0;">
+      <div class="checkbox-row">
+        <input type="checkbox" id="confirm-read" name="confirm_read" required>
+        <label for="confirm-read" id="confirm-label">Kam lexuar dhe pranoj rregullat e kampit</label>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Vazhdo te regjistrimi</button>
     </div>
-    <button class="btn btn-primary btn-block" id="continue-btn" disabled>Vazhdo te regjistrimi</button>
   </div>
-</div>
-
-<script>
-const checkbox = document.getElementById('confirm-read');
-const continueBtn = document.getElementById('continue-btn');
-
-checkbox.addEventListener('change', () => {
-  continueBtn.disabled = !checkbox.checked;
-});
-
-continueBtn.addEventListener('click', async () => {
-  if (continueBtn.disabled) return;
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  await fetch("{{ url_for('auth.accept_rules') }}", {
-    method: 'POST',
-    headers: { 'X-CSRFToken': csrfToken },
-  });
-  window.location.href = "{{ url_for('auth.register') }}";
-});
-</script>
+</form>
 {% endblock %}
